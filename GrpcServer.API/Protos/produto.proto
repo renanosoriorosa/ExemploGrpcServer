@@ -1,0 +1,28 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.API.Service.gRPC";
+
+package GrpcServerAPI;
+
+service ProdutoControllerGRPC {
+	rpc ObterProdutos(ObterProdutosRequest) returns (ListObterProdutosResponse);
+	rpc ObterProdutoPorId(ObterProdutoPorIdRequest) returns (ObterProdutosResponse);
+}
+
+message ObterProdutosRequest {
+}
+
+message ListObterProdutosResponse {
+	repeated ObterProdutosResponse produtos = 1;
+}
+
+message ObterProdutosResponse {
+	string id = 1;
+	string codigo  = 2;
+	string nome = 3;
+	double preco = 4;
+}
+
+message ObterProdutoPorIdRequest {
+	string id = 1;
+}
