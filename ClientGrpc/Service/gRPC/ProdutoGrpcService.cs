@@ -25,7 +25,7 @@ namespace ClientGrpc.Service.gRPC
             return MapProdutosToProtoResponse(produtos);
         }
 
-        public async Task<ProdutoGrpcDTO> ObterProdutoPorIdAsync(int idProduto)
+        public async Task<ProdutoGrpcDTO?> ObterProdutoPorIdAsync(int idProduto)
         {
             var produto = await _produtoControllerGRPC
                 .ObterProdutoPorIdAsync(new ObterProdutoPorIdRequest { Id = idProduto.ToString() });
@@ -33,10 +33,13 @@ namespace ClientGrpc.Service.gRPC
             return MapProdutoToProtoResponse(produto);
         }
 
-        private ProdutoGrpcDTO MapProdutoToProtoResponse(ObterProdutosResponse produto)
+        private ProdutoGrpcDTO? MapProdutoToProtoResponse(ObterProdutosResponse produto)
         {
             if (produto is null)
-                return new ProdutoGrpcDTO();
+                return null;
+
+            if (string.IsNullOrEmpty(produto.Id))
+                return null;
 
             return new ProdutoGrpcDTO
             {
@@ -52,7 +55,7 @@ namespace ClientGrpc.Service.gRPC
             List<ProdutoGrpcDTO> ProdutosGrpcDTO = new List<ProdutoGrpcDTO>();
 
             foreach (var produto in produtosResponse.Produtos)
-                ProdutosGrpcDTO.Add(MapProdutoToProtoResponse(produto));
+                ProdutosGrpcDTO.Add(MapProdutoToProtoResponse(produto)!);
 
             return ProdutosGrpcDTO;
         }

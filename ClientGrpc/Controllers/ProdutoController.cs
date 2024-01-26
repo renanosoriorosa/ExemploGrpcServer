@@ -33,7 +33,12 @@ namespace ClientGrpc.Controllers
         {
             try
             {
-                return Ok(await _produtoServiceGrpc.ObterProdutoPorIdAsync(idProduto));
+                var produto = await _produtoServiceGrpc.ObterProdutoPorIdAsync(idProduto);
+
+                if(produto  is null)
+                    return BadRequest("Produto não encontrado");
+
+                return Ok(produto);
             }
             catch (Exception e)
             {
